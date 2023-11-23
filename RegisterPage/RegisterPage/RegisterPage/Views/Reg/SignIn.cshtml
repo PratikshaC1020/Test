@@ -1,0 +1,288 @@
+﻿@model RegisterPage.Models.Register
+
+@{
+    ViewBag.Title = "SignIn";
+    Layout = null;
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/sweetalert/sweet-alert.css" rel="stylesheet" />
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css" rel="stylesheet"/>*@
+
+
+<html>
+<head>
+
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger " })
+
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card bg-light border border-0" >
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-2">
+
+                                </div>
+                                <div class="col-sm-4 mt-5">
+                                    <h1 class="fw-bold">The Best Offer</h1>
+                                    <h1 class="fw-bold" style="color:blue;">For Your Business</h1>
+                                    <p class="mt-5 text-secondary">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident nulla blanditiis
+                                        quo nihil alias ipsam eveniet eligendi iusto. A culpa eum earum doloribus laudantium,
+                                        mollitia deleniti sequi itaque sapiente asperiores!
+                                    </p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div style="height:30rem;" class="card bg-white border border-0">
+                                        <div class="card-body">
+                                            <div class="col-sm-12">
+                                                <div class="row ">
+                                                    <div class="col-sm-6 mt-3">
+                                                        @Html.EditorFor(model => model.Firstname, new { htmlAttributes = new { @class = "form-control namevalidation", @placeholder = "First Name", @id = "FName" } })
+                                                        @Html.ValidationMessageFor(model => model.Firstname, "", new { @class = "text-danger" })
+                                                        <div id="Validation"></div>
+                                                    </div>
+
+
+                                                    <div class="col-sm-6 mt-3">
+
+                                                        @Html.EditorFor(model => model.Lastname, new { htmlAttributes = new { @class = "form-control namevalidation", @placeholder = "Last Name", @id = "LName" } })
+                                                        @Html.ValidationMessageFor(model => model.Lastname, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div id="Validation"></div>
+
+                                                    <div class="col-sm-12 mt-4">
+                                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Email Address", @id = "Email" } })
+
+                                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div id="ValidationEmail"></div>
+
+                                                    <div class="col-sm-12 mt-4">
+                                                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Password", @id = "password", @type = "password" } })
+                                                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div id="passwordValidationMessage"></div>
+
+                                                    <div class="col-sm-12 mt-4">
+                                                        @Html.EditorFor(model => model.confirmPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "Confirm Password", @id = "confirmPassword", @type = "password" } })
+                                                        @Html.ValidationMessageFor(model => model.confirmPassword, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <div id="cpasswordValidationMessage"></div>
+                                                    <div class="col-sm-12 mt-4">
+                                                        @Html.CheckBoxFor(model => model.ShowSubscribe, new { @id = "Check" })
+                                                        Subscribe to our newsletter
+
+                                                        @Html.ValidationMessageFor(model => model.ShowSubscribe, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <div class="col-sm-12 mt-4 fw-bold">
+                                                        <input type="button" value="SIGN UP" class="btn btn-primary w-100" id="submit" />
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+
+    //Password vaidation Start
+
+    $(document).ready(function () {
+        $("#password").keyup(function () {
+            validatePassword();
+        });
+    });
+
+    function validatePassword() {
+        var password = $("#password").val();
+        var isValid = true;
+
+
+        if (password.length < 8) {
+            $("#passwordValidationMessage").html("Password must be at least 8 characters long.").css("color", "red");
+            isValid = false;
+        } else {
+            $("#passwordValidationMessage").html("");
+
+        }
+
+
+        if (!/[A-Z]/.test(password)) {
+            $("#passwordValidationMessage").append("<br>Include at least one uppercase letter.").css("color", "red");
+            isValid = false;
+        } else {
+            $("#passwordValidationMessage").append("");
+        }
+
+
+        if (!/[a-z]/.test(password)) {
+            $("#passwordValidationMessage").append("<br>Include at least one lowercase letter.").css("color", "red");
+            isValid = false;
+        } else {
+            $("#passwordValidationMessage").append("");
+        }
+
+
+        if (!/\d/.test(password)) {
+            $("#passwordValidationMessage").append("<br>Include at least one number.").css("color", "red");
+            isValid = false;
+        } else {
+            $("#passwordValidationMessage").append("");
+        }
+
+
+        if (!/[!#@@$%^&*(),.?":{}|<>]/.test(password)) {
+            $("#passwordValidationMessage").append("<br>Include at least one symbol.").css("color", "red");
+            isValid = false;
+        } else {
+            $("#passwordValidationMessage").append("");
+        }
+
+        return isValid;
+    }
+    //Password validation End
+
+
+    //Match Password validation start
+    $(document).ready(function () {
+        $("#confirmPassword").keyup(function () {
+            confirmPassword();
+        });
+    });
+
+    function confirmPassword() {
+        var password = $("#password").val();
+        var confirmPassword = $("#confirmPassword").val();
+
+        if (password !== confirmPassword) {
+            $("#cpasswordValidationMessage").html("Passwords do not match").css("color", "red");
+        }
+        else {
+            $("#cpasswordValidationMessage").html("");
+        }
+    }
+    //Match Password validation End
+
+
+    //Email Validation Start
+
+    $(document).ready(function () {
+        $("#Email").keyup(function () {
+            emailpattern();
+        });
+    });
+
+
+    function emailpattern() {
+        var email = $('#Email').val();
+        var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+
+        if (!emailRegex.test(email)) {
+            $("#ValidationEmail").html("Email is not valid").css("color", "red");
+        }
+        else {
+            $("#ValidationEmail").html("");
+        }
+    }
+    //Email validation End
+
+
+    //name Validation
+    $(document).ready(function () {
+
+        $(".namevalidation").keypress(function (event) {
+
+            if (event.which >= 48 && event.which <= 57) {
+
+                event.preventDefault();
+            }
+        });
+    });
+
+</script>
+
+
+<script>
+
+    $(document).ready(function () {
+        $("#submit").click(function (e) {
+
+            if ($("#FName").val() === "" || $("#LName").val() === "" || $("#Email").val() === "" || $("#password").val() === "" || $("#confirmPassword").val() === "") {
+                Swal.fire({
+                    title: 'Required!',
+                    text: 'Missing Information..! Please fill required data',
+                    type: 'warning',
+                    confirmButtonText: 'ok'
+                })
+                return false;
+            }
+            else if ($("#password").val() !== $("#confirmPassword").val()) {
+                confirmPassword();
+            }
+            else {
+
+                var fname = $('#FName').val();
+                var lname = $('#LName').val();
+                var email = $('#Email').val();
+                var password = $('#password').val();
+                var Cpassword = $('#confirmPassword').val();
+                var check = $('#Check').val();
+                e.preventDefault();
+
+                var isconfirm = window.confirm("Do you want to save it?");
+                if (isconfirm) {
+                    $.ajax({
+                        url: '/Reg/SignIn',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { Firstname: fname, Lastname: lname, Email: email, Password: password, confirmPassword: Cpassword, ShowSubscribe: check },
+                        success: function (result) {
+
+                            Swal.fire({
+                                text: result,
+                                icon: 'success',
+                                confirmButtonText: 'Ok'
+
+                            })
+                            $('#FName').val('');
+                            $('#LName').val('');
+                            $('#Email').val('');
+                            $('#password').val('');
+                            $('#confirmPassword').val('');
+                            $("#Check").prop("checked", false);
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+</script>
+
+
